@@ -5,6 +5,8 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.aws.messaging.config.annotation.EnableSqs;
 import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
@@ -23,13 +25,14 @@ public class SQSConfig {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    @Value("${cloud.aws.credentials.access-key}")
-    private String awsAccessKey;
 
-    @Value("${cloud.aws.credentials.secret-key}")
-    private String awsSecretKey;
+    private AWSStaticCredentialsProvider awsStaticCredentialsProvider;
 
 
+    @Autowired
+    public SQSConfig(@Qualifier("accessCredentails") AWSStaticCredentialsProvider awsStaticCredentialsProvider) {
+        this.awsStaticCredentialsProvider = awsStaticCredentialsProvider;
+    }
 
     @Bean
     public QueueMessagingTemplate queuqMessagingTemplate(){
@@ -43,7 +46,7 @@ public class SQSConfig {
         return AmazonSQSAsyncClientBuilder
                 .standard()
                 .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsAccessKey,awsSecretKey)))
+                .withCredentials(awsStaticCredentialsProvider)
                 .build();
     }
 
