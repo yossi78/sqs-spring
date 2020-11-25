@@ -2,6 +2,7 @@ package com.example.sqsspring.services;
 
 import com.example.sqsspring.dto.Notification;
 import com.example.sqsspring.dto.User;
+import com.example.sqsspring.sqs.SQSTemplateProvider;
 import com.example.sqsspring.utils.MapperUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.minidev.json.JSONObject;
@@ -14,7 +15,7 @@ import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
+
 
 
 
@@ -28,21 +29,17 @@ public class SQSService {
     @Value("${cloud.aws.end-point.uri}")
     private String sqsEndPoint;
 
-
-    private QueueMessagingTemplate queueMessagingTemplate;
+    private SQSTemplateProvider sqsTemplateProvider;
     private final String MESSAGE="Message";
 
 
 
     @Autowired
-    public SQSService(QueueMessagingTemplate queueMessagingTemplate) {
-        this.queueMessagingTemplate = queueMessagingTemplate;
+    public SQSService(SQSTemplateProvider sqsTemplateProvider) {
+        this.sqsTemplateProvider = sqsTemplateProvider;
     }
 
-    @PostConstruct
-    public void init(){
-        queueMessagingTemplate.setDefaultDestinationName(sqsEndPoint);
-    }
+
 
 
     public User addUser(User user) throws JsonProcessingException {
@@ -61,6 +58,7 @@ public class SQSService {
 
     public void sendMessage(String payload){
         logger.info("Sending message to SQS : "+payload);
+        QueueMessagingTemplate queueMessagingTemplate=this.sqsTemplateProvider.getQueuqMessagingTemplate(sqsEndPoint);
         queueMessagingTemplate.send(sqsEndPoint,MessageBuilder.withPayload(payload).build());
     }
 
@@ -90,6 +88,7 @@ public class SQSService {
 
 
     public GenericMessage poll()  {
+        QueueMessagingTemplate queueMessagingTemplate=this.sqsTemplateProvider.getQueuqMessagingTemplate(sqsEndPoint);
         GenericMessage genericMessage = (GenericMessage)queueMessagingTemplate.receive();
         return genericMessage;
     }
@@ -100,7 +99,7 @@ public class SQSService {
 
 
 
-
+//
 //    @SqsListener("${cloud.aws.end-point.ququeName}")
 //    public void pollMessages(String message){
 //        logger.info("Recieved Message: " + message);
