@@ -1,4 +1,4 @@
-package com.example.sqsspring.config;
+package com.example.sqsspring.aws;
 
 import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
@@ -6,17 +6,16 @@ import com.amazonaws.services.securitytoken.AWSSecurityTokenService;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder;
 import com.amazonaws.services.securitytoken.model.AssumeRoleRequest;
 import com.amazonaws.services.securitytoken.model.AssumeRoleResult;
-import com.example.sqsspring.services.SQSService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
 
 
-@Configuration
-public class BasicSessionCredentialsConfig {
+
+@Service
+public class AWSAssumeRole {
 
 
     @Value("${cloud.aws.region.static}")
@@ -31,10 +30,10 @@ public class BasicSessionCredentialsConfig {
     @Value("${aws-assume-role.roleSessionName}")
     private String roleSessionName;
 
-    private static final Logger logger = LoggerFactory.getLogger(BasicSessionCredentialsConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(AWSAssumeRole.class);
 
 
-    @Bean("assumeRole")
+
     public BasicSessionCredentials getBasicSessionCredentials(){
         AWSSecurityTokenService stsClient = createStsClient();
         AssumeRoleResult assumeRoleResult = assumeRole(stsClient);
