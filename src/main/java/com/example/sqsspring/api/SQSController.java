@@ -1,7 +1,7 @@
 package com.example.sqsspring.api;
 
 import com.example.sqsspring.dto.User;
-import com.example.sqsspring.services.SQSService;
+import com.example.sqsspring.sqs.SQSService;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -13,8 +13,6 @@ import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
-
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "Type",

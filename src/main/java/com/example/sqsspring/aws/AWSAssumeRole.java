@@ -1,5 +1,6 @@
 package com.example.sqsspring.aws;
 
+
 import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenService;

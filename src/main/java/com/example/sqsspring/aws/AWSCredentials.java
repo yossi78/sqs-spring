@@ -13,7 +13,7 @@ public class AWSCredentials {
 
 
     @Value("${cloud.aws.credentials.access-key}")
-    private String awsAccessKey;
+    private String awsAccessKey ;
 
     @Value("${cloud.aws.credentials.secret-key}")
     private String awsSecretKey;
