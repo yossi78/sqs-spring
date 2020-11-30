@@ -48,6 +48,9 @@ public class SQSController {
     public ResponseEntity pollPayload() {
         try {
             JSONObject jsonObject =  sqsService.pollPayLoad();
+            if(jsonObject==null){
+                return new ResponseEntity("", HttpStatus.NO_CONTENT);
+            }
             return new ResponseEntity(jsonObject, HttpStatus.OK);
         }catch (Exception e){
             logger.error("Failed to poll payload",e);
@@ -59,8 +62,11 @@ public class SQSController {
     @GetMapping(value = "/message")
     public ResponseEntity pollMessage() {
         try {
-            JSONObject jsonObject =  sqsService.pollMessageFromPayload();
-            return new ResponseEntity(jsonObject, HttpStatus.OK);
+            String messageFromPayload =  sqsService.pollMessageFromPayload();
+            if(messageFromPayload==null){
+                return new ResponseEntity("", HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity(messageFromPayload, HttpStatus.OK);
         }catch (Exception e){
             logger.error("Failed to poll message",e);
             return new ResponseEntity<>(e.getCause(),HttpStatus.INTERNAL_SERVER_ERROR);

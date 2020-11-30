@@ -63,14 +63,18 @@ public class SQSService {
 
 
 
-    public JSONObject pollMessageFromPayload() throws JsonProcessingException, ParseException {
+    public String pollMessageFromPayload() throws ParseException, JsonProcessingException {
         JSONObject payload = pollPayLoad();
         JSONObject messageFromPayload=null;
         if(payload!=null){
-            Object object =  payload.get(MESSAGE);
-            messageFromPayload=MapperUtil.toJSONObject(object);
+            Object object = payload.get(MESSAGE);
+            try {
+                messageFromPayload=MapperUtil.toJSONObject(object);
+            } catch (Exception e) {
+                return MapperUtil.toPrettyJSONObjectStr(object);
+            }
         }
-        return messageFromPayload;
+        return MapperUtil.toPrettyJSONObjectStr(messageFromPayload);
     }
 
 

@@ -15,6 +15,17 @@ public class MapperUtil {
 
 
 
+    public static String toPrettyJSONObjectStr (Object object) throws JsonProcessingException {
+        if(object==null || object instanceof String) {
+            return (String) object;
+        }
+        String result=null;
+        ObjectMapper mapper = new ObjectMapper();
+        result =  mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        return result;
+    }
+
+
     public static JSONObject toJSONObject(Object object) throws ParseException, JsonProcessingException {
         if(object instanceof String){
             return parseToJSONObject((String) object);
@@ -40,10 +51,13 @@ public class MapperUtil {
     }
 
 
-    public  static <T> T serializeToString(Object object) throws JsonProcessingException {
+    public  static String serializeToString(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        T responseObject = null;
-        responseObject = (T) objectMapper.writeValueAsString(object);
+        String responseObject = null;
+        if(object instanceof String){
+            return (String)object;
+        }
+        responseObject = objectMapper.writeValueAsString(object);
         return responseObject;
     }
 
