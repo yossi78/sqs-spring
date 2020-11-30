@@ -37,7 +37,7 @@ public class SQSController {
             logger.info("User has been added successfully");
             return new ResponseEntity(user,HttpStatus.CREATED);
         }catch (Exception e){
-            logger.error("Failed to add new Human",e);
+            logger.error("Failed to add new User",e);
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -50,6 +50,7 @@ public class SQSController {
             JSONObject jsonObject =  sqsService.pollPayLoad();
             return new ResponseEntity(jsonObject, HttpStatus.OK);
         }catch (Exception e){
+            logger.error("Failed to poll payload",e);
             return new ResponseEntity<>(e.getCause(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -61,6 +62,7 @@ public class SQSController {
             JSONObject jsonObject =  sqsService.pollMessageFromPayload();
             return new ResponseEntity(jsonObject, HttpStatus.OK);
         }catch (Exception e){
+            logger.error("Failed to poll message",e);
             return new ResponseEntity<>(e.getCause(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -73,6 +75,7 @@ public class SQSController {
         try {
             return new ResponseEntity("SQS Service Health is OK", HttpStatus.OK);
         }catch (Exception e){
+            logger.error("Failed run health check",e);
             return new ResponseEntity<>(e.getCause(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
