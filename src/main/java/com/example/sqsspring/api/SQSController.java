@@ -76,15 +76,7 @@ public class SQSController {
 
 
 
-    @GetMapping(value = "/health")
-    public ResponseEntity healthCheck() {
-        try {
-            return new ResponseEntity("SQS Service Health is OK", HttpStatus.OK);
-        }catch (Exception e){
-            logger.error("Failed run health check",e);
-            return new ResponseEntity<>(e.getCause(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+
 
 
 
